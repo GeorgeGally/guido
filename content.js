@@ -5,20 +5,22 @@
   const RULER_TOP = 20;
   const GUIDE_GRAB = 7;
   const palettes = {
-    braun: { guide: "#df6331", accent: "#df6331", readout: "#e6e5de", tag: "#f3f2ec", ink: "#30312c" },
-    cyan: { guide: "#008592", accent: "#008592", readout: "#e2eeec", tag: "#f0f5f3", ink: "#243638" },
-    graphite: { guide: "#73756e", accent: "#55564f", readout: "#e3e3dc", tag: "#f1f1eb", ink: "#2b2c28" }
+    orange: { guide: "#df6331", mirror: "#a84a25", accent: "#df6331", readout: "#e6e5de", tag: "#f3f2ec", ink: "#30312c" },
+    cyan: { guide: "#008592", mirror: "#00525c", accent: "#008592", readout: "#e2eeec", tag: "#f0f5f3", ink: "#243638" },
+    pink: { guide: "#d24d77", mirror: "#8f3150", accent: "#d24d77", readout: "#eee3e7", tag: "#f7eef1", ink: "#382a30" },
+    green: { guide: "#6c8c55", mirror: "#466132", accent: "#6c8c55", readout: "#e7e9df", tag: "#f0f1ea", ink: "#2e352a" },
+    blue: { guide: "#3975b8", mirror: "#214d80", accent: "#3975b8", readout: "#e2e8f0", tag: "#f0f4f8", ink: "#283342" }
   };
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none";
   const shadow = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
   style.textContent = `
-    *{box-sizing:border-box}.ruler{position:fixed;background:#dfded6;color:#55564f;pointer-events:auto;font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;user-select:none;touch-action:none}
-    #top{left:${RULER_LEFT}px;right:0;top:0;height:${RULER_TOP}px;border-bottom:1px solid #c9c9c1;background-image:repeating-linear-gradient(90deg,#74776f 0 1px,transparent 1px 100px),repeating-linear-gradient(90deg,#969890 0 1px,transparent 1px 50px),repeating-linear-gradient(90deg,#b1b2ab 0 1px,transparent 1px 10px);background-size:100% 16px,100% 10px,100% 5px;background-repeat:repeat-x}
-    #left{top:${RULER_TOP}px;bottom:0;left:0;width:${RULER_LEFT}px;border-right:1px solid #c9c9c1;background-image:repeating-linear-gradient(180deg,#74776f 0 1px,transparent 1px 100px),repeating-linear-gradient(180deg,#969890 0 1px,transparent 1px 50px),repeating-linear-gradient(180deg,#b1b2ab 0 1px,transparent 1px 10px);background-size:${RULER_LEFT}px 100%,10px 100%,5px 100%;background-repeat:repeat-y}
-    #corner{left:0;top:0;width:${RULER_LEFT}px;height:${RULER_TOP}px;z-index:3;cursor:crosshair;background:#dfded6;border-right:1px solid #c9c9c1;border-bottom:1px solid #c9c9c1;border-radius:0 0 10px 0}#corner:after{content:"";position:absolute;left:5px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--palette-accent,#df6331)}
-    .label{position:absolute;white-space:nowrap;background:#dfded6;padding:1px 2px}.h-label{top:3px}.v-label{left:2px;writing-mode:vertical-rl}.readout{position:fixed;z-index:4;top:${RULER_TOP + 8}px;left:${RULER_LEFT + 10}px;background:var(--readout-bg,#e6e5de);color:var(--palette-ink,#30312c);border:1px solid #c9c9c1;padding:3px 6px;border-radius:2px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none}
+    *{box-sizing:border-box}.ruler{position:fixed;background:#171a20;color:#f2ece0;pointer-events:auto;font:10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;user-select:none;touch-action:none}
+    #top{left:${RULER_LEFT}px;right:0;top:0;height:${RULER_TOP}px;border-bottom:1px solid #4a4c47;background-image:repeating-linear-gradient(90deg,#f2ece0 0 1px,transparent 1px 100px),repeating-linear-gradient(90deg,#d0cabe 0 1px,transparent 1px 50px),repeating-linear-gradient(90deg,#65655f 0 1px,transparent 1px 10px);background-size:100% 16px,100% 10px,100% 5px;background-repeat:repeat-x}
+    #left{top:${RULER_TOP}px;bottom:0;left:0;width:${RULER_LEFT}px;border-right:1px solid #4a4c47;background-image:repeating-linear-gradient(180deg,#f2ece0 0 1px,transparent 1px 100px),repeating-linear-gradient(180deg,#d0cabe 0 1px,transparent 1px 50px),repeating-linear-gradient(180deg,#65655f 0 1px,transparent 1px 10px);background-size:${RULER_LEFT}px 100%,10px 100%,5px 100%;background-repeat:repeat-y}
+    #corner{left:0;top:0;width:${RULER_LEFT}px;height:${RULER_TOP}px;z-index:3;cursor:crosshair;background:#171a20;border-right:1px solid #4a4c47;border-bottom:1px solid #4a4c47;border-radius:0 0 10px 0}#corner:after{content:"";position:absolute;left:5px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--palette-accent,#df6331)}
+    .label{position:absolute;white-space:nowrap;background:#171a20;padding:1px 2px}.h-label{top:3px}.v-label{left:2px;writing-mode:vertical-rl}.readout{position:fixed;z-index:4;top:${RULER_TOP + 8}px;left:${RULER_LEFT + 10}px;background:var(--readout-bg,#e6e5de);color:var(--palette-ink,#30312c);border:1px solid #c9c9c1;padding:3px 6px;border-radius:2px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none}
     .guide{position:absolute;pointer-events:auto;touch-action:none}.horizontal{left:${RULER_LEFT}px;right:0;height:${GUIDE_GRAB}px;transform:translateY(-50%);cursor:ns-resize}.vertical{top:${RULER_TOP}px;bottom:0;width:${GUIDE_GRAB}px;transform:translateX(-50%);cursor:ew-resize}.line{position:absolute;background:var(--guide-color,#df6331);pointer-events:none}.horizontal .line{height:var(--guide-hairline,1px);left:0;right:0;top:var(--guide-inset,3px)}.vertical .line{width:var(--guide-hairline,1px);top:0;bottom:0;left:var(--guide-inset,3px)}
     .tag{position:fixed;background:var(--tag-bg,#f3f2ec);color:var(--palette-ink,#30312c);border:1px solid #c9c9c1;border-radius:3px;padding:3px 6px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none;white-space:nowrap;z-index:5}.hidden{display:none!important}`;
   shadow.append(style);
@@ -29,10 +31,10 @@
   shadow.append(top, left, corner, readout);
   document.documentElement.append(host);
 
-  let active = false, visibleGuides = true, separate = false, paletteName = "braun", guides = [], dragging = null, densityQuery = null;
+  let active = false, visibleGuides = true, separate = false, paletteName = "orange", guides = [], dragging = null, densityQuery = null;
   const pageKey = `guides:${location.origin}${location.pathname}${location.search}`;
   const storageKey = () => separate ? pageKey : "guides:shared";
-  const palette = () => palettes[paletteName] || palettes.braun;
+  const palette = () => palettes[paletteName] || palettes.orange;
   const documentSize = axis => axis === "v"
     ? Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0, document.documentElement.clientWidth, innerWidth)
     : Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0, document.documentElement.clientHeight, innerHeight);
@@ -118,7 +120,7 @@
     if (message.type === "toggle") { active = !active; chrome.storage.local.set({ overlayEnabled: active }); if (active) chrome.storage.local.get(storageKey(), restoreGuides); else paint(); }
     if (message.type === "toggle-guides") { visibleGuides = !visibleGuides; chrome.storage.local.set({ guidesVisible: visibleGuides }); paint(); }
     if (message.type === "clear-guides") { guides.forEach(guide => guide.el.remove()); guides = []; save(); }
-    if (message.type === "set-palette") { paletteName = palettes[message.palette] ? message.palette : "braun"; applyPalette(); renderAll(); }
+    if (message.type === "set-palette") { paletteName = palettes[message.palette] ? message.palette : "orange"; applyPalette(); renderAll(); }
     if (message.type === "set-separate") {
       const current = guides.map(({ axis, position }) => ({ axis, position }));
       chrome.storage.local.set({ [storageKey()]: current }).then(() => {
@@ -134,7 +136,7 @@
   updateDensity(); applyPalette();
   chrome.storage.local.get(["overlayEnabled", "guidesVisible", "separate", "palette", "guideColor"], result => {
     active = result.overlayEnabled === true; visibleGuides = result.guidesVisible !== false; separate = result.separate === true;
-    paletteName = palettes[result.palette] ? result.palette : "braun"; applyPalette();
+    paletteName = palettes[result.palette] ? result.palette : "orange"; applyPalette();
     if (result.palette !== paletteName) chrome.storage.local.set({ palette: paletteName });
     if (result.guideColor) chrome.storage.local.remove("guideColor");
     chrome.storage.local.get(storageKey(), restoreGuides);

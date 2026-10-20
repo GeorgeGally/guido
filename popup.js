@@ -26,7 +26,7 @@ const separateInput = document.querySelector("#separate");
 const swatches = [...document.querySelectorAll(".swatch")];
 let rulersEnabled = false;
 let guidesVisible = true;
-let palette = "braun";
+let palette = "orange";
 
 const render = () => {
   rulersButton.setAttribute("aria-pressed", String(rulersEnabled));
@@ -56,7 +56,7 @@ chrome.storage.local.get(["overlayEnabled", "guidesVisible", "separate", "palett
   rulersEnabled = result.overlayEnabled === true;
   guidesVisible = result.guidesVisible !== false;
   separateInput.checked = result.separate === true;
-  palette = ["braun", "cyan", "graphite"].includes(result.palette) ? result.palette : "braun";
+  palette = ["orange", "cyan", "pink", "green", "blue"].includes(result.palette) ? result.palette : "orange";
   if (result.palette !== palette) chrome.storage.local.set({ palette });
   if (result.guideColor) chrome.storage.local.remove("guideColor");
   render();

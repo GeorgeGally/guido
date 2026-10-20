@@ -22,7 +22,8 @@ Open `test/lab.html` to compare the three static ruler treatments. The lab is se
 - Drag a guide to move it; drag it back onto its ruler to remove it.
 - Double-click a guide to enter its exact position in CSS pixels.
 - `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+C` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
-- The popup toggles rulers and guide visibility, clears guides, and selects one of three palettes: Braun, Cyan, or Graphite.
+- The popup toggles rulers and guide visibility, clears guides, and selects one of five single-dot palettes: Orange, Cyan, Pink, Green, or Blue.
+- A saved Graphite palette selection migrates to Orange.
 - With **Separate guides per page** off, guides are shared across pages. Turn it on to store a separate set for each page URL. Guides use document coordinates; rulers stay in the viewport.
 - Each palette sets the guide, centre-to-edge shade, tag, and readout colours. Guides shade smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
 
