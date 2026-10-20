@@ -1,17 +1,19 @@
 (() => {
   if (window.__guidesOverlay) return;
 
+  const RULER_LEFT = 18;
+  const RULER_TOP = 20;
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none";
   const shadow = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
   style.textContent = `
     *{box-sizing:border-box} .ruler{position:fixed;background:#171a20;color:#f2f5f7;pointer-events:auto;box-shadow:0 1px 5px #0008;font:10px/1.2 Arial,sans-serif;user-select:none;touch-action:none}
-    #top{left:18px;right:0;top:0;height:20px;border-bottom:1px solid #ffffff45;background-image:repeating-linear-gradient(90deg,#edf2f7 0 1px,transparent 1px 100px),repeating-linear-gradient(90deg,#c5cdd5 0 1px,transparent 1px 50px),repeating-linear-gradient(90deg,#87929e 0 1px,transparent 1px 10px);background-size:100% 18px,100% 11px,100% 6px;background-repeat:repeat-x}
-    #left{top:20px;bottom:0;left:0;width:18px;border-right:1px solid #ffffff45;background-image:repeating-linear-gradient(180deg,#edf2f7 0 1px,transparent 1px 100px),repeating-linear-gradient(180deg,#c5cdd5 0 1px,transparent 1px 50px),repeating-linear-gradient(180deg,#87929e 0 1px,transparent 1px 10px);background-size:18px 100%,11px 100%,6px 100%;background-repeat:repeat-y}
-    #corner{left:0;top:0;width:18px;height:20px;z-index:2;cursor:crosshair;background:#171a20;border-right:1px solid #ffffff45;border-bottom:1px solid #ffffff45}
-    .label{position:absolute;white-space:nowrap;background:#171a20;padding:1px 2px}.h-label{top:1px}.v-label{left:1px;writing-mode:vertical-rl}.readout{position:fixed;z-index:4;top:22px;left:22px;background:#171a20;color:white;padding:4px 6px;border-radius:2px;font:11px Arial;pointer-events:none}
-    .guide{position:absolute;pointer-events:auto;touch-action:none}.horizontal{left:18px;right:0;height:7px;transform:translateY(-50%);cursor:ns-resize}.vertical{top:20px;bottom:0;width:7px;transform:translateX(-50%);cursor:ew-resize}.line{position:absolute;background:var(--guide-color,#00e5ff);box-shadow:0 0 1px #000;pointer-events:none}.horizontal .line{height:1px;left:0;right:0;top:3px}.vertical .line{width:1px;top:0;bottom:0;left:3px}.tag{position:fixed;background:#10161b;color:#fff;padding:3px 5px;font:11px Arial;pointer-events:none;white-space:nowrap;z-index:5}.hidden{display:none!important}`;
+    #top{left:${RULER_LEFT}px;right:0;top:0;height:${RULER_TOP}px;border-bottom:1px solid #ffffff45;background-image:repeating-linear-gradient(90deg,#edf2f7 0 1px,transparent 1px 100px),repeating-linear-gradient(90deg,#c5cdd5 0 1px,transparent 1px 50px),repeating-linear-gradient(90deg,#87929e 0 1px,transparent 1px 10px);background-size:100% 18px,100% 11px,100% 6px;background-repeat:repeat-x}
+    #left{top:${RULER_TOP}px;bottom:0;left:0;width:${RULER_LEFT}px;border-right:1px solid #ffffff45;background-image:repeating-linear-gradient(180deg,#edf2f7 0 1px,transparent 1px 100px),repeating-linear-gradient(180deg,#c5cdd5 0 1px,transparent 1px 50px),repeating-linear-gradient(180deg,#87929e 0 1px,transparent 1px 10px);background-size:${RULER_LEFT}px 100%,11px 100%,6px 100%;background-repeat:repeat-y}
+    #corner{left:0;top:0;width:${RULER_LEFT}px;height:${RULER_TOP}px;z-index:2;cursor:crosshair;background:#171a20;border-right:1px solid #ffffff45;border-bottom:1px solid #ffffff45}
+    .label{position:absolute;white-space:nowrap;background:#171a20;padding:1px 2px}.h-label{top:1px}.v-label{left:1px;writing-mode:vertical-rl}.readout{position:fixed;z-index:4;top:${RULER_TOP + 2}px;left:${RULER_LEFT + 4}px;background:#171a20;color:white;padding:4px 6px;border-radius:2px;font:11px Arial;pointer-events:none}
+    .guide{position:absolute;pointer-events:auto;touch-action:none}.horizontal{left:${RULER_LEFT}px;right:0;height:7px;transform:translateY(-50%);cursor:ns-resize}.vertical{top:${RULER_TOP}px;bottom:0;width:7px;transform:translateX(-50%);cursor:ew-resize}.line{position:absolute;background:var(--guide-color,#00e5ff);box-shadow:0 0 1px #000;pointer-events:none}.horizontal .line{height:1px;left:0;right:0;top:3px}.vertical .line{width:1px;top:0;bottom:0;left:3px}.tag{position:fixed;background:#10161b;color:#fff;padding:3px 5px;font:11px Arial;pointer-events:none;white-space:nowrap;z-index:5}.hidden{display:none!important}`;
   shadow.append(style);
   const top = document.createElement("div"); top.id = "top"; top.className = "ruler";
   const left = document.createElement("div"); left.id = "left"; left.className = "ruler";
@@ -40,18 +42,23 @@
   const restoreGuides = stored => { guides.forEach(guide => guide.el.remove()); guides = []; (stored[storageKey()] || []).forEach(makeGuide); paint(); };
   const paint = () => {
     top.replaceChildren(); left.replaceChildren();
-    top.style.backgroundPosition = `${-(scrollX % 100)}px 0,${-(scrollX % 50)}px 0,${-(scrollX % 10)}px 0`;
-    left.style.backgroundPosition = `0 ${-(scrollY % 100)}px,0 ${-(scrollY % 50)}px,0 ${-(scrollY % 10)}px`;
+    top.style.backgroundPosition = `${-((scrollX + RULER_LEFT) % 100)}px 0,${-((scrollX + RULER_LEFT) % 50)}px 0,${-((scrollX + RULER_LEFT) % 10)}px 0`;
+    left.style.backgroundPosition = `0 ${-((scrollY + RULER_TOP) % 100)}px,0 ${-((scrollY + RULER_TOP) % 50)}px,0 ${-((scrollY + RULER_TOP) % 10)}px`;
     top.classList.toggle("hidden", !active); left.classList.toggle("hidden", !active); readout.classList.toggle("hidden", !active);
     corner.classList.toggle("hidden", !active);
-    for (let x = Math.floor(scrollX / 100) * 100; x < scrollX + innerWidth; x += 100) { const label = document.createElement("span"); label.className = "label h-label"; label.style.left = `${x - scrollX + 2}px`; label.textContent = x; top.append(label); }
-    for (let y = Math.floor(scrollY / 100) * 100; y < scrollY + innerHeight; y += 100) { const label = document.createElement("span"); label.className = "label v-label"; label.style.top = `${y - scrollY + 2}px`; label.textContent = y; left.append(label); }
+    for (let x = Math.floor((scrollX + RULER_LEFT) / 100) * 100; x < scrollX + innerWidth; x += 100) { const position = x - scrollX - RULER_LEFT + 2; if (position < 0) continue; const label = document.createElement("span"); label.className = "label h-label"; label.style.left = `${position}px`; label.textContent = x; top.append(label); }
+    for (let y = Math.floor((scrollY + RULER_TOP) / 100) * 100; y < scrollY + innerHeight; y += 100) { const position = y - scrollY - RULER_TOP + 2; if (position < 0) continue; const label = document.createElement("span"); label.className = "label v-label"; label.style.top = `${position}px`; label.textContent = y; left.append(label); }
     guides.forEach(renderGuide);
   };
   const beginDrag = (event, guidesToDrag) => { event.preventDefault(); event.stopPropagation(); dragging = { guides: Array.isArray(guidesToDrag) ? guidesToDrag : [guidesToDrag] }; const target = Array.isArray(guidesToDrag) ? guidesToDrag[0].el : guidesToDrag.el; (event.currentTarget || target).setPointerCapture(event.pointerId); };
   const move = event => {
     if (!active) return;
-    readout.textContent = `x ${Math.round(event.clientX + scrollX)} · y ${Math.round(event.clientY + scrollY)}`;
+    let cursorX = Math.round(event.clientX + scrollX), cursorY = Math.round(event.clientY + scrollY);
+    if (dragging && event.shiftKey) for (const guide of dragging.guides) {
+      if (guide.axis === "h") cursorY = Math.round((event.clientY + scrollY) / 10) * 10;
+      else cursorX = Math.round((event.clientX + scrollX) / 10) * 10;
+    }
+    readout.textContent = `x ${cursorX} · y ${cursorY}`;
     if (!dragging) return;
     const positions = dragging.guides.map(guide => {
       const rawPosition = guide.axis === "h" ? event.clientY + scrollY : event.clientX + scrollX;
@@ -64,7 +71,7 @@
   const finish = event => {
     if (!dragging) return;
     for (const guide of dragging.guides) {
-      if ((guide.axis === "h" && event.clientY <= 20) || (guide.axis === "v" && event.clientX <= 18)) { guide.el.remove(); guides = guides.filter(item => item !== guide); }
+      if ((guide.axis === "h" && event.clientY <= RULER_TOP) || (guide.axis === "v" && event.clientX <= RULER_LEFT)) { guide.el.remove(); guides = guides.filter(item => item !== guide); }
       else if (guides.some(item => item !== guide && item.axis === guide.axis && Math.round(item.position) === Math.round(guide.position))) { guide.el.remove(); guides = guides.filter(item => item !== guide); }
     }
     dragging = null; shadow.querySelector(".tag")?.remove(); save();
