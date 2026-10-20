@@ -22,15 +22,18 @@ const send = async message => {
 
 const rulersButton = document.querySelector("#rulers");
 const guidesButton = document.querySelector("#guides");
+const mirrorButton = document.querySelector("#mirror");
 const separateInput = document.querySelector("#separate");
 const swatches = [...document.querySelectorAll(".swatch")];
 let rulersEnabled = false;
 let guidesVisible = true;
+let mirrorEnabled = false;
 let palette = "braun";
 
 const render = () => {
   rulersButton.setAttribute("aria-pressed", String(rulersEnabled));
   guidesButton.setAttribute("aria-pressed", String(guidesVisible));
+  mirrorButton.setAttribute("aria-pressed", String(mirrorEnabled));
   swatches.forEach(swatch => swatch.setAttribute("aria-pressed", String(swatch.dataset.palette === palette)));
 };
 
@@ -39,6 +42,9 @@ rulersButton.addEventListener("click", async () => {
 });
 guidesButton.addEventListener("click", async () => {
   if (await send({ type: "toggle-guides" })) { guidesVisible = !guidesVisible; render(); }
+});
+mirrorButton.addEventListener("click", async () => {
+  if (await send({ type: "toggle-mirror" })) { mirrorEnabled = !mirrorEnabled; render(); }
 });
 document.querySelector("#clear").addEventListener("click", () => send({ type: "clear-guides" }));
 separateInput.addEventListener("change", () => {
@@ -52,11 +58,12 @@ swatches.forEach(swatch => swatch.addEventListener("click", () => {
   render();
 }));
 
-chrome.storage.local.get(["overlayEnabled", "guidesVisible", "separate", "palette", "guideColor"], result => {
+chrome.storage.local.get(["overlayEnabled", "guidesVisible", "separate", "mirror", "palette", "guideColor"], result => {
   rulersEnabled = result.overlayEnabled === true;
   guidesVisible = result.guidesVisible !== false;
+  mirrorEnabled = result.mirror === true;
   separateInput.checked = result.separate === true;
-  palette = ["braun", "cyan", "graphite"].includes(result.palette) ? result.palette : "braun";
+  palette = ["braun", "cyan", "pink", "blue"].includes(result.palette) ? result.palette : "braun";
   if (result.palette !== palette) chrome.storage.local.set({ palette });
   if (result.guideColor) chrome.storage.local.remove("guideColor");
   render();
