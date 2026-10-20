@@ -1,5 +1,26 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"></head><body>
-  <main><h1>Guides</h1><button id="toggle">Toggle rulers</button><button id="clear">Clear guides</button><label for="color">Guide colour</label><input id="color" type="color" value="#00e5ff"><label class="setting"><input id="separate" type="checkbox"> Separate guides per page</label></main>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ruler</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1 class="wordmark">ruler<span>.</span></h1>
+    <section class="rows" aria-label="Ruler settings">
+      <button id="rulers" class="row" type="button" aria-pressed="false"><span>Rulers</span><span class="pill"><i></i></span></button>
+      <button id="guides" class="row" type="button" aria-pressed="true"><span>Guides visible</span><span class="pill"><i></i></span></button>
+      <label class="row separate" for="separate"><span>Separate per page</span><input id="separate" type="checkbox"></label>
+      <div class="row palette-row"><span>Palette</span><div class="swatches" role="group" aria-label="Palette">
+        <button class="swatch braun" type="button" data-palette="braun" aria-label="Braun palette" aria-pressed="true" title="Braun"><i></i></button>
+        <button class="swatch cyan" type="button" data-palette="cyan" aria-label="Cyan palette" aria-pressed="false" title="Cyan"><i></i></button>
+        <button class="swatch graphite" type="button" data-palette="graphite" aria-label="Graphite palette" aria-pressed="false" title="Graphite"><i></i></button>
+      </div></div>
+    </section>
+    <button id="clear" class="clear" type="button">Clear guides</button>
+  </main>
   <script src="popup.js"></script>
-</body></html>
+</body>
+</html>
