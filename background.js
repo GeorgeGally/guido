@@ -8,7 +8,6 @@ async function toggle(tab) {
   }
 }
 
-chrome.action.onClicked.addListener(toggle);
 chrome.commands.onCommand.addListener(async command => {
   const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
   if (command === "toggle-overlay") return toggle(tab);
