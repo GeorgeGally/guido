@@ -11,6 +11,10 @@ A Chrome extension that overlays rulers and draggable guides on any webpage, lik
 
 Chrome may ask you to allow file access for the local test page. Alternatively, serve the folder with any local static server and open `/test/` over localhost.
 
+## Design lab
+
+Open `test/lab.html` to compare the three static ruler treatments. The lab is separate from the extension UI. Screenshots are in `docs/screenshots/lab-v1.png`, `lab-v2.png`, `lab-v3.png`, and `lab-all.png`.
+
 ## Use
 
 - Drag from the top ruler for a horizontal guide or the left ruler for a vertical guide.
