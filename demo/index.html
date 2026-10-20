@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruler demo page</title>
+<style>
+  /* the same language as the Ruler dropdown: flat light grey, mono type, one orange */
+  :root { --bg: #ececec; --ink: #202020; --mut: #666; --soft: #dedede; --orange: #ff5a00; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 15px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  nav { display: flex; align-items: baseline; gap: 40px; padding: 56px 0 0; color: var(--mut); font-size: 14px; }
+  .mark { margin-right: auto; color: var(--ink); font: 700 22px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.035em; }
+  .mark span, h1 span { color: var(--orange); }
+  header { padding: 128px 0 88px; }
+  h1 { font: 700 64px/1.02 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.04em; }
+  header p { margin-top: 28px; max-width: 30em; color: var(--mut); }
+  .panel { height: 320px; background: var(--soft); border-radius: 2px; display: grid; place-items: center; }
+  .dial { width: 132px; height: 132px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; }
+  .dial::after { content: ""; width: 16px; height: 16px; border-radius: 50%; background: var(--orange); }
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; padding: 88px 0 160px; }
+  .row h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+  .row p { color: var(--mut); font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav><span class="mark">studio<span>.</span></span><span>Work</span><span>About</span><span>Contact</span></nav>
+    <header>
+      <h1>Less, but better<span>.</span></h1>
+      <p>A 960 px column with equal 240 px margins: the kind of page Ruler is made for checking.</p>
+    </header>
+    <div class="panel"><span class="dial"></span></div>
+    <div class="row">
+      <div><h3>Measure</h3><p>Rulers in CSS pixels that follow the page as it scrolls.</p></div>
+      <div><h3>Align</h3><p>Guides you drag out, snap to 10 px, or type in exactly.</p></div>
+      <div><h3>Mirror</h3><p>Equal margins on both sides, set once.</p></div>
+    </div>
+  </div>
+</body>
+</html>
