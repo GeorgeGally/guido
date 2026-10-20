@@ -36,8 +36,8 @@
   const storageKey = () => separate ? pageKey : "guides:shared";
   const palette = () => palettes[paletteName] || palettes.orange;
   const documentSize = axis => axis === "v"
-    ? Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0, document.documentElement.clientWidth, innerWidth)
-    : Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0, document.documentElement.clientHeight, innerHeight);
+    ? Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth)
+    : Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight);
   const guideColor = guide => {
     let hex = palette().guide.slice(1);
     const extent = documentSize(guide.axis);
