@@ -58,12 +58,6 @@
       },
       "description": "Clear all guides"
     },
-    "mirror-last": {
-      "suggested_key": {
-        "default": "Alt+Shift+M"
-      },
-      "description": "Mirror the last guide"
-    },
     "toggle-mirror": {
       "suggested_key": {
         "default": "Alt+Shift+M"
