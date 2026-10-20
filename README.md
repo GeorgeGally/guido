@@ -1,13 +1,13 @@
-# Guides
+# Ruler
 
-A Chrome extension that overlays rulers and draggable guides on any webpage, like Illustrator.
+Rulers and guides for any web page.
 
 ## Install
 
 1. Open `chrome://extensions`.
 2. Turn on **Developer mode**.
 3. Select **Load unpacked** and choose this project folder.
-4. Open `test/index.html` in Chrome and use the Guides toolbar button or `Alt+R`.
+4. Open `test/index.html` in Chrome and use the Ruler toolbar button or `Alt+R`.
 
 Chrome may ask you to allow file access for the local test page. Alternatively, serve the folder with any local static server and open `/test/` over localhost.
 
@@ -22,9 +22,9 @@ Open `test/lab.html` to compare the three static ruler treatments. The lab is se
 - Drag a guide to move it; drag it back onto its ruler to remove it.
 - Double-click a guide to enter its exact position in CSS pixels.
 - `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+C` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
-- The popup toggles the overlay, clears guides, and sets their colour.
+- The popup toggles rulers and guide visibility, clears guides, and selects one of three palettes: Braun, Cyan, or Graphite.
 - With **Separate guides per page** off, guides are shared across pages. Turn it on to store a separate set for each page URL. Guides use document coordinates; rulers stay in the viewport.
-- Guide colour shades smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
+- Each palette sets the guide, centre-to-edge shade, tag, and readout colours. Guides shade smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
 
 ## Manual test checklist
 
@@ -35,7 +35,7 @@ Open `test/lab.html` to compare the three static ruler treatments. The lab is se
 - [ ] Drop two guides on the same axis and rounded pixel position; confirm they merge into one.
 - [ ] Drag guides onto their matching ruler and confirm they disappear.
 - [ ] Toggle guide visibility and clear all guides from the popup or shortcuts.
-- [ ] Change guide colour in the popup.
+- [ ] Select each palette in the popup.
 - [ ] Hold Shift while drawing or moving a guide and confirm it snaps to the nearest 10 CSS pixels.
 - [ ] Leave **Separate guides per page** off, navigate to `test/second.html`, and confirm guides are shared; reload and confirm the ruler overlay remains on.
 - [ ] Turn **Separate guides per page** on and confirm each test page restores its own set.
