@@ -22,7 +22,7 @@
     #corner{left:0;top:0;width:${RULER_LEFT}px;height:${RULER_TOP}px;z-index:3;cursor:crosshair;background:#171a20;border-right:1px solid #4a4c47;border-bottom:1px solid #4a4c47;border-radius:0 0 10px 0}#corner:after{content:"";position:absolute;left:5px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--palette-accent,#df6331)}
     .label{position:absolute;white-space:nowrap;background:#171a20;padding:1px 2px}.h-label{top:3px}.v-label{left:2px;writing-mode:vertical-rl}.readout{position:fixed;z-index:4;top:${RULER_TOP + 8}px;left:${RULER_LEFT + 10}px;background:#171a20;color:#f2ece0;border:0;padding:4px 7px;border-radius:3px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none}
     .guide{position:absolute;pointer-events:auto;touch-action:none}.horizontal{left:${RULER_LEFT}px;right:0;height:${GUIDE_GRAB}px;transform:translateY(-50%);cursor:ns-resize}.vertical{top:${RULER_TOP}px;bottom:0;width:${GUIDE_GRAB}px;transform:translateX(-50%);cursor:ew-resize}:host(.norulers) .vertical{top:0}:host(.norulers) .horizontal{left:0}.line{position:absolute;background:var(--guide-color,#df6331);pointer-events:none}.horizontal .line{height:var(--guide-hairline,1px);left:0;right:0;top:var(--guide-inset,3px)}.vertical .line{width:var(--guide-hairline,1px);top:0;bottom:0;left:var(--guide-inset,3px)}.horizontal .line.mirror{transform:translateY(var(--mirror-shift,0))}.vertical .line.mirror{transform:translateX(var(--mirror-shift,0))}.guide:not(.mirrored) .line.mirror{display:none}
-    .tag{position:fixed;background:#171a20;color:#f2ece0;border:0;border-radius:3px;padding:4px 7px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none;white-space:nowrap;z-index:5}.hidden{display:none!important}`;
+    .edit{position:fixed;z-index:6;width:52px;padding:4px 7px;border:0;border-radius:3px;outline:none;background:#171a20;color:#f2ece0;caret-color:#f2ece0;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:auto}.edit::selection{background:var(--guide-accent,#df6331);color:#fff}.tag{position:fixed;background:#171a20;color:#f2ece0;border:0;border-radius:3px;padding:4px 7px;font:10px ui-monospace,SFMono-Regular,Menlo,monospace;pointer-events:none;white-space:nowrap;z-index:5}.hidden{display:none!important}`;
   shadow.append(style);
   const top = document.createElement("div"); top.id = "top"; top.className = "ruler";
   const left = document.createElement("div"); left.id = "left"; left.className = "ruler";
@@ -71,11 +71,29 @@
     const el = document.createElement("div"); el.className = `guide ${axis === "h" ? "horizontal" : "vertical"}`;
     const line = document.createElement("span"); line.className = "line"; const twin = document.createElement("span"); twin.className = "line mirror"; el.append(line, twin); shadow.append(el);
     const guide = { axis, position: Number(position), el }; guides.push(guide); renderGuide(guide);
-    el.addEventListener("pointerdown", event => { if (event.detail > 1) { event.preventDefault(); event.stopPropagation(); editGuide(guide); } else beginDrag(event, guide); });
-    el.addEventListener("dblclick", event => { event.stopPropagation(); editGuide(guide); });
+    el.addEventListener("pointerdown", event => { if (event.detail > 1) { event.preventDefault(); event.stopPropagation(); editGuide(guide, event); } else beginDrag(event, guide); });
+    el.addEventListener("dblclick", event => { event.stopPropagation(); editGuide(guide, event); });
     return guide;
   };
-  const editGuide = guide => { const value = prompt(`${guide.axis === "v" ? "Vertical" : "Horizontal"} guide position (CSS px)`, String(Math.round(guide.position))); if (value !== null && Number.isFinite(Number(value))) { guide.position = Math.max(0, Number(value)); renderAll(); save(); } };
+  /* double-click a guide: type its position in a small field right on the line; Enter sets it, Esc or clicking away cancels */
+  const editGuide = (guide, event) => {
+    if (shadow.querySelector(".edit")) return;
+    const input = document.createElement("input");
+    input.className = "edit"; input.type = "text"; input.inputMode = "numeric"; input.value = String(Math.round(guide.position));
+    const x = guide.axis === "v" ? guide.position - scrollX + 6 : (event ? event.clientX : 60) + 8;
+    const y = guide.axis === "h" ? guide.position - scrollY + 6 : (event ? event.clientY : 60) + 8;
+    input.style.left = `${x}px`; input.style.top = `${y}px`;
+    shadow.append(input); input.focus(); input.select();
+    let done = false;
+    const close = apply => {
+      if (done) return; done = true;
+      const value = Number(input.value.trim());
+      if (apply && input.value.trim() !== "" && Number.isFinite(value)) { guide.position = Math.max(0, value); renderAll(); save(); }
+      input.remove();
+    };
+    input.addEventListener("keydown", e => { e.stopPropagation(); if (e.key === "Enter") close(true); if (e.key === "Escape") close(false); });
+    input.addEventListener("blur", () => close(false));
+  };
   const restoreGuides = stored => { guides.forEach(guide => guide.el.remove()); guides = []; (stored[storageKey()] || []).forEach(makeGuide); paint(); };
   const beginDrag = (event, guidesToDrag) => { event.preventDefault(); event.stopPropagation(); dragging = { guides: Array.isArray(guidesToDrag) ? guidesToDrag : [guidesToDrag] }; const target = Array.isArray(guidesToDrag) ? guidesToDrag[0].el : guidesToDrag.el; (event.currentTarget || target).setPointerCapture(event.pointerId); };
   const move = event => {
