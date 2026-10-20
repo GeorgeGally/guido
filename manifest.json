@@ -60,7 +60,7 @@
     },
     "toggle-mirror": {
       "suggested_key": {
-        "default": "Alt+Shift+M"
+        "default": "Alt+M"
       },
       "description": "Mirror on or off"
     }
