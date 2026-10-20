@@ -34,6 +34,7 @@ After an update, click the reload arrow on Ruler's card in `chrome://extensions`
 | `Alt+R` | Rulers on or off |
 | `Alt+Shift+R` | Show or hide guides |
 | `Alt+Shift+C` | Clear all guides |
+| `Alt+Shift+M` | Mirror on or off |
 
 Change them at `chrome://extensions/shortcuts`.
 

@@ -9,19 +9,66 @@
     "48": "icons/ruler-48.png",
     "128": "icons/ruler-128.png"
   },
-  "permissions": ["storage", "activeTab", "scripting"],
-  "host_permissions": ["<all_urls>"],
-  "background": { "service_worker": "background.js" },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "Ruler",
     "default_popup": "popup.html",
-    "default_icon": { "16": "icons/ruler-16.png", "32": "icons/ruler-32.png" }
+    "default_icon": {
+      "16": "icons/ruler-16.png",
+      "32": "icons/ruler-32.png"
+    }
   },
-  "content_scripts": [{ "matches": ["<all_urls>"], "js": ["content.js"], "run_at": "document_idle" }],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
   "commands": {
-    "toggle-overlay": { "suggested_key": { "default": "Alt+R" }, "description": "Toggle rulers and guides" },
-    "toggle-guides": { "suggested_key": { "default": "Alt+Shift+R" }, "description": "Show or hide guides" },
-    "clear-guides": { "suggested_key": { "default": "Alt+Shift+C" }, "description": "Clear all guides" },
-    "mirror-last": { "suggested_key": { "default": "Alt+Shift+M" }, "description": "Mirror the last guide" }
+    "toggle-overlay": {
+      "suggested_key": {
+        "default": "Alt+R"
+      },
+      "description": "Toggle rulers and guides"
+    },
+    "toggle-guides": {
+      "suggested_key": {
+        "default": "Alt+Shift+R"
+      },
+      "description": "Show or hide guides"
+    },
+    "clear-guides": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Clear all guides"
+    },
+    "mirror-last": {
+      "suggested_key": {
+        "default": "Alt+Shift+M"
+      },
+      "description": "Mirror the last guide"
+    },
+    "toggle-mirror": {
+      "suggested_key": {
+        "default": "Alt+Shift+M"
+      },
+      "description": "Mirror on or off"
+    }
   }
 }
