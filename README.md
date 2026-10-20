@@ -1,44 +1,48 @@
-# Ruler
+# ruler.
 
-Rulers and guides for any web page.
+Rulers and guides for any web page. A Chrome extension for checking layouts, margins and alignment on live sites.
+
+![Ruler on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/hero.png)
+
+<img src="docs/screenshots/popup.png" alt="The Ruler dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
+
+## What it does
+
+- **Rulers** along the top and left edges, in CSS pixels, that follow the page as you scroll.
+- **Guides** you drag out of either ruler. Drag from the corner square to place a horizontal and a vertical guide together.
+- **Exact positions.** Hold Shift to snap to every 10 px. Double-click a guide to type its position.
+- **Mirror.** With Mirror on, every guide gets a twin at the same distance from the opposite edge, which makes equal left and right page margins easy.
+- **Shading.** Guides get slightly darker towards the edges of the page, so you can tell the outer ones from the inner ones at a glance.
+- **Palettes.** Orange, Cyan, Pink, Green or Blue.
+- **Guides stay put.** They are saved and shared across pages, or kept per page if you turn on *Separate per page*. Turning the rulers off leaves your guides on screen.
+
+<br clear="right">
 
 ## Install
 
-1. Open `chrome://extensions`.
-2. Turn on **Developer mode**.
-3. Select **Load unpacked** and choose this project folder.
-4. Open `test/index.html` in Chrome and use the Ruler toolbar button or `Alt+R`.
+1. Download or clone this repository.
+2. Open `chrome://extensions` and turn on **Developer mode**.
+3. Click **Load unpacked** and choose this folder.
+4. Pin Ruler from the puzzle-piece menu.
 
-Chrome may ask you to allow file access for the local test page. Alternatively, serve the folder with any local static server and open `/test/` over localhost.
+After an update, click the reload arrow on Ruler's card in `chrome://extensions`.
 
-## Design lab
+## Shortcuts
 
-Open `test/lab.html` to compare the three static ruler treatments. The lab is separate from the extension UI. Screenshots are in `docs/screenshots/lab-v1.png`, `lab-v2.png`, `lab-v3.png`, and `lab-all.png`.
+| Keys | Action |
+| --- | --- |
+| `Alt+R` | Rulers on or off |
+| `Alt+Shift+R` | Show or hide guides |
+| `Alt+Shift+C` | Clear all guides |
 
-## Use
+Change them at `chrome://extensions/shortcuts`.
 
-- Drag from the top ruler for a horizontal guide or the left ruler for a vertical guide.
-- Drag from the square where the rulers meet to place a horizontal and vertical crosshair together.
-- Drag a guide to move it; drag it back onto its ruler to remove it.
-- Double-click a guide to enter its exact position in CSS pixels.
-- `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+C` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
-- The popup toggles rulers and guide visibility, clears guides, and selects one of five single-dot palettes: Orange, Cyan, Pink, Green, or Blue.
-- A saved Graphite palette selection migrates to Orange.
-- With **Separate guides per page** off, guides are shared across pages. Turn it on to store a separate set for each page URL. Guides use document coordinates; rulers stay in the viewport.
-- Each palette sets the guide, centre-to-edge shade, tag, and readout colours. Guides shade smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
+## Using guides
 
-## Manual test checklist
+- Drag a guide to move it. Drag it back onto its ruler to remove it.
+- Two guides dropped on the same pixel merge into one.
+- Guides use page coordinates, so they stay on the same spot of the page when you scroll.
 
-- [ ] Toggle the overlay from the toolbar and with `Alt+R`.
-- [ ] Create horizontal and vertical guides, drag them, and confirm the position label follows.
-- [ ] Drag from the top-left ruler corner and confirm both guides move together before dropping.
-- [ ] Double-click each orientation and enter an exact position.
-- [ ] Drop two guides on the same axis and rounded pixel position; confirm they merge into one.
-- [ ] Drag guides onto their matching ruler and confirm they disappear.
-- [ ] Toggle guide visibility and clear all guides from the popup or shortcuts.
-- [ ] Select each palette in the popup.
-- [ ] Hold Shift while drawing or moving a guide and confirm it snaps to the nearest 10 CSS pixels.
-- [ ] Leave **Separate guides per page** off, navigate to `test/second.html`, and confirm guides are shared; reload and confirm the ruler overlay remains on.
-- [ ] Turn **Separate guides per page** on and confirm each test page restores its own set.
-- [ ] Scroll and confirm guides stay attached to document positions while ruler ticks track the page's scroll position.
-- [ ] Reload the page, reopen the overlay, and confirm guides are restored.
+## Development
+
+Plain JavaScript, no build step: `content.js` draws the rulers and guides, `popup.html` / `popup.css` / `popup.js` are the dropdown, and `background.js` handles the shortcuts. `test/index.html` and `test/second.html` are pages for trying it out.
