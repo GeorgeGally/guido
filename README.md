@@ -21,7 +21,7 @@ Open `test/lab.html` to compare the three static ruler treatments. The lab is se
 - Drag from the square where the rulers meet to place a horizontal and vertical crosshair together.
 - Drag a guide to move it; drag it back onto its ruler to remove it.
 - Double-click a guide to enter its exact position in CSS pixels.
-- `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+Backspace` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
+- `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+C` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
 - The popup toggles the overlay, clears guides, and sets their colour.
 - With **Separate guides per page** off, guides are shared across pages. Turn it on to store a separate set for each page URL. Guides use document coordinates; rulers stay in the viewport.
 - Guide colour shades smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
