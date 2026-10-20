@@ -31,7 +31,7 @@
   shadow.append(top, left, corner, readout);
   document.documentElement.append(host);
 
-  let active = false, visibleGuides = true, separate = false, paletteName = "orange", guides = [], dragging = null, densityQuery = null;
+  let active = false, visibleGuides = true, separate = false, mirror = false, paletteName = "orange", guides = [], dragging = null, densityQuery = null;
   const pageKey = `guides:${location.origin}${location.pathname}${location.search}`;
   const storageKey = () => separate ? pageKey : "guides:shared";
   const palette = () => palettes[paletteName] || palettes.orange;
@@ -112,6 +112,7 @@
     if (message.type === "toggle") { active = !active; chrome.storage.local.set({ overlayEnabled: active }); if (active) chrome.storage.local.get(storageKey(), restoreGuides); else paint(); }
     if (message.type === "toggle-guides") { visibleGuides = !visibleGuides; chrome.storage.local.set({ guidesVisible: visibleGuides }); paint(); }
     if (message.type === "clear-guides") { guides.forEach(guide => guide.el.remove()); guides = []; save(); }
+    if (message.type === "toggle-mirror") { mirror = typeof message.mirror === "boolean" ? message.mirror : !mirror; chrome.storage.local.set({ mirror }); renderAll(); }
     if (message.type === "set-palette") { paletteName = palettes[message.palette] ? message.palette : "orange"; applyPalette(); renderAll(); }
     if (message.type === "set-separate") {
       const current = guides.map(({ axis, position }) => ({ axis, position }));
@@ -127,7 +128,7 @@
   window.__rulerOverlayLoaded = true; window.__guidesOverlay = true;
   applyPalette();
   chrome.storage.local.get(["overlayEnabled", "guidesVisible", "separate", "mirror", "palette", "guideColor"], result => {
-    active = result.overlayEnabled === true; visibleGuides = result.guidesVisible !== false; separate = result.separate === true;
+    active = result.overlayEnabled === true; visibleGuides = result.guidesVisible !== false; separate = result.separate === true; mirror = result.mirror === true;
     paletteName = palettes[result.palette] ? result.palette : "orange"; applyPalette();
     if (result.palette !== paletteName) chrome.storage.local.set({ palette: paletteName });
     if (result.guideColor) chrome.storage.local.remove("guideColor");
