@@ -8,8 +8,8 @@
     orange: { guide: "#df6331", mirror: "#a84a25", accent: "#df6331", readout: "#e6e5de", tag: "#f3f2ec", ink: "#30312c" },
     cyan: { guide: "#008592", mirror: "#00525c", accent: "#008592", readout: "#e2eeec", tag: "#f0f5f3", ink: "#243638" },
     pink: { guide: "#d24d77", mirror: "#8f3150", accent: "#d24d77", readout: "#eee3e7", tag: "#f7eef1", ink: "#382a30" },
-    green: { guide: "#6c8c55", mirror: "#466132", accent: "#6c8c55", readout: "#e7e9df", tag: "#f0f1ea", ink: "#2e352a" },
-    blue: { guide: "#3975b8", mirror: "#214d80", accent: "#3975b8", readout: "#e2e8f0", tag: "#f0f4f8", ink: "#283342" }
+    green: { guide: "#82a76a", mirror: "#5a7a44", accent: "#82a76a", readout: "#e7e9df", tag: "#f0f1ea", ink: "#2e352a" },
+    blue: { guide: "#4f8fd6", mirror: "#2f6aa8", accent: "#4f8fd6", readout: "#e2e8f0", tag: "#f0f4f8", ink: "#283342" }
   };
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none";

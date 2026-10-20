@@ -23,8 +23,8 @@ button { cursor: pointer }
 .swatch.orange i { background: #df6331 }
 .swatch.cyan i { background: #008592 }
 .swatch.pink i { background: #d24d77 }
-.swatch.green i { background: #6c8c55 }
-.swatch.blue i { background: #3975b8 }
+.swatch.green i { background: #82a76a }
+.swatch.blue i { background: #4f8fd6 }
 .swatch[aria-pressed=true] { box-shadow: 0 0 0 2px #ececec, 0 0 0 3px #777 }
 .clear { display: block; margin: 42px 0 0; padding: 0; border: 0; background: transparent; color: #747474; text-align: left; font: 400 14px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0 }
 .clear:hover { color: #ff5a00 }
