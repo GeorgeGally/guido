@@ -25,6 +25,18 @@
   let active = false, visibleGuides = true, separate = false, color = "#00e5ff", guides = [], dragging = null;
   const pageKey = `guides:${location.origin}${location.pathname}${location.search}`;
   const storageKey = () => separate ? pageKey : "guides:shared";
+  const guideColor = guide => {
+    let hex = color.slice(1);
+    if (hex.length === 3) hex = [...hex].map(value => value + value).join("");
+    if (!/^[0-9a-f]{6}$/i.test(hex)) return color;
+    const width = Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth || 0, innerWidth);
+    const height = Math.max(document.documentElement.scrollHeight, document.body?.scrollHeight || 0, innerHeight);
+    const center = (guide.axis === "v" ? width : height) / 2;
+    const distance = center ? Math.min(1, Math.abs(guide.position - center) / center) : 0;
+    const brightness = 1 - 0.3 * distance;
+    const channels = hex.match(/.{2}/g).map(channel => Math.round(parseInt(channel, 16) * brightness).toString(16).padStart(2, "0"));
+    return `#${channels.join("")}`;
+  };
   const editGuide = guide => { const value = prompt("Guide position (CSS px)", String(Math.round(guide.position))); if (value !== null && Number.isFinite(Number(value))) { guide.position = Math.max(0, Number(value)); renderGuide(guide); save(); } };
   const makeGuide = ({ axis, position }) => {
     const el = document.createElement("div");
@@ -37,7 +49,7 @@
     el.addEventListener("pointerdown", event => { if (event.detail > 1) { event.preventDefault(); event.stopPropagation(); editGuide(guide); } else beginDrag(event, guide); });
     el.addEventListener("dblclick", event => { event.stopPropagation(); editGuide(guide); });
   };
-  const renderGuide = guide => { guide.el.style.left = guide.axis === "v" ? `${guide.position - scrollX}px` : ""; guide.el.style.top = guide.axis === "h" ? `${guide.position - scrollY}px` : ""; guide.el.classList.toggle("hidden", !active || !visibleGuides); };
+  const renderGuide = guide => { guide.el.style.left = guide.axis === "v" ? `${guide.position - scrollX}px` : ""; guide.el.style.top = guide.axis === "h" ? `${guide.position - scrollY}px` : ""; guide.el.style.setProperty("--guide-color", guideColor(guide)); guide.el.classList.toggle("hidden", !active || !visibleGuides); };
   const save = () => chrome.storage.local.set({ [storageKey()]: guides.map(({ axis, position }) => ({ axis, position })) });
   const restoreGuides = stored => { guides.forEach(guide => guide.el.remove()); guides = []; (stored[storageKey()] || []).forEach(makeGuide); paint(); };
   const paint = () => {
@@ -92,7 +104,7 @@
     if (message.type === "toggle") { active = !active; chrome.storage.local.set({ overlayEnabled: active }); if (active) chrome.storage.local.get(storageKey(), restoreGuides); else paint(); }
     if (message.type === "toggle-guides") { visibleGuides = !visibleGuides; paint(); }
     if (message.type === "clear-guides") { guides.forEach(guide => guide.el.remove()); guides = []; save(); }
-    if (message.type === "set-color") { color = message.color; guides.forEach(guide => guide.el.style.setProperty("--guide-color", color)); }
+    if (message.type === "set-color") { color = message.color; guides.forEach(renderGuide); }
     if (message.type === "set-separate") {
       const current = guides.map(({ axis, position }) => ({ axis, position }));
       chrome.storage.local.set({ [storageKey()]: current }).then(() => {

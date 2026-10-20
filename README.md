@@ -20,6 +20,7 @@ Chrome may ask you to allow file access for the local test page. Alternatively, 
 - `Alt+R` toggles the overlay, `Alt+Shift+R` toggles guide visibility, and `Alt+Shift+Backspace` clears guides. Chrome lets you change these under `chrome://extensions/shortcuts`.
 - The popup toggles the overlay, clears guides, and sets their colour.
 - With **Separate guides per page** off, guides are shared across pages. Turn it on to store a separate set for each page URL. Guides use document coordinates; rulers stay in the viewport.
+- Guide colour shades smoothly toward 30% darker at document edges, measured from the horizontal and vertical document centres.
 
 ## Manual test checklist
 
