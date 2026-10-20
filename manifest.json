@@ -21,6 +21,7 @@
   "commands": {
     "toggle-overlay": { "suggested_key": { "default": "Alt+R" }, "description": "Toggle rulers and guides" },
     "toggle-guides": { "suggested_key": { "default": "Alt+Shift+R" }, "description": "Show or hide guides" },
-    "clear-guides": { "suggested_key": { "default": "Alt+Shift+C" }, "description": "Clear all guides" }
+    "clear-guides": { "suggested_key": { "default": "Alt+Shift+C" }, "description": "Clear all guides" },
+    "mirror-last": { "suggested_key": { "default": "Alt+Shift+M" }, "description": "Mirror the last guide" }
   }
 }
