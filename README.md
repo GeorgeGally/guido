@@ -1,10 +1,10 @@
-# guido.
+# guide.
 
 Guides and rulers for any web page. A Chrome extension for lining things up: margins, columns and alignment on live sites.
 
-![Guido on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/ruler-demo.png)
+![Guide on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/ruler-demo.png)
 
-<img src="docs/screenshots/guido-dropdown.png" alt="The Guido dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
+<img src="docs/screenshots/guide-dropdown.png" alt="The Guide dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
 
 ## What it does
 
@@ -23,9 +23,9 @@ Guides and rulers for any web page. A Chrome extension for lining things up: mar
 1. Download or clone this repository.
 2. Open `chrome://extensions` and turn on **Developer mode**.
 3. Click **Load unpacked** and choose this folder.
-4. Pin Guido from the puzzle-piece menu.
+4. Pin Guide from the puzzle-piece menu.
 
-After an update, click the reload arrow on Guido's card in `chrome://extensions`.
+After an update, click the reload arrow on Guide's card in `chrome://extensions`.
 
 ## Shortcuts
 
