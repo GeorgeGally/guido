@@ -2,7 +2,7 @@
 
 Rulers and guides for any web page. A Chrome extension for checking layouts, margins and alignment on live sites.
 
-![Ruler on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/hero.png)
+![Ruler on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/ruler-demo.png)
 
 <img src="docs/screenshots/popup.png" alt="The Ruler dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
 
