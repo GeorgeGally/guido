@@ -79,7 +79,7 @@
   const restoreGuides = stored => { guides.forEach(guide => guide.el.remove()); guides = []; (stored[storageKey()] || []).forEach(makeGuide); paint(); };
   const beginDrag = (event, guidesToDrag) => { event.preventDefault(); event.stopPropagation(); dragging = { guides: Array.isArray(guidesToDrag) ? guidesToDrag : [guidesToDrag] }; const target = Array.isArray(guidesToDrag) ? guidesToDrag[0].el : guidesToDrag.el; (event.currentTarget || target).setPointerCapture(event.pointerId); };
   const move = event => {
-    if (!active) return;
+    if (!active && !dragging) return;
     let cursorX = Math.round(event.clientX + scrollX), cursorY = Math.round(event.clientY + scrollY);
     if (dragging) {
       const positions = dragging.guides.map(guide => {
