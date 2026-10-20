@@ -1,15 +1,15 @@
-# Ruler
+# guido.
 
-Rulers and guides for any web page. A Chrome extension for checking layouts, margins and alignment on live sites.
+Guides and rulers for any web page. A Chrome extension for lining things up: margins, columns and alignment on live sites.
 
-![Ruler on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/ruler-demo.png)
+![Guido on a web page: rulers along the top and left, orange guides, mirrored margins](docs/screenshots/ruler-demo.png)
 
-<img src="docs/screenshots/popup.png" alt="The Ruler dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
+<img src="docs/screenshots/guido-dropdown.png" alt="The Guido dropdown: Rulers, Guides visible, Mirror, Separate per page, Palette and Clear guides" width="320" align="right">
 
 ## What it does
 
-- **Rulers** along the top and left edges, in CSS pixels, that follow the page as you scroll.
 - **Guides** you drag out of either ruler. Drag from the corner square to place a horizontal and a vertical guide together.
+- **Rulers** along the top and left edges, in CSS pixels, that follow the page as you scroll.
 - **Exact positions.** Hold Shift to snap to every 10 px. Double-click a guide to type its position.
 - **Mirror.** With Mirror on, each new guide gets a twin at the same distance from the opposite document edge, which makes equal margins easy. Alt-click any guide to mirror it once.
 - **Shading.** Guides get slightly darker towards the edges of the page, so you can tell the outer ones from the inner ones at a glance.
@@ -23,9 +23,9 @@ Rulers and guides for any web page. A Chrome extension for checking layouts, mar
 1. Download or clone this repository.
 2. Open `chrome://extensions` and turn on **Developer mode**.
 3. Click **Load unpacked** and choose this folder.
-4. Pin Ruler from the puzzle-piece menu.
+4. Pin Guido from the puzzle-piece menu.
 
-After an update, click the reload arrow on Ruler's card in `chrome://extensions`.
+After an update, click the reload arrow on Guido's card in `chrome://extensions`.
 
 ## Shortcuts
 

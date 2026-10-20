@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Ruler",
+  "name": "Guido",
   "version": "1.1.0",
-  "description": "Rulers and guides for any web page.",
+  "description": "Guides and rulers for any web page.",
   "icons": {
     "16": "icons/ruler-16.png",
     "32": "icons/ruler-32.png",
@@ -21,7 +21,7 @@
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "Ruler",
+    "default_title": "Guido",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/ruler-16.png",
@@ -44,7 +44,7 @@
       "suggested_key": {
         "default": "Alt+R"
       },
-      "description": "Toggle rulers and guides"
+      "description": "Rulers on or off"
     },
     "toggle-guides": {
       "suggested_key": {
