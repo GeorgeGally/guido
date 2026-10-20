@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Guides",
+  "version": "1.0.0",
+  "description": "Viewport rulers and draggable page guides.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Toggle rulers and guides", "default_popup": "popup.html" },
+  "commands": {
+    "toggle-overlay": { "suggested_key": { "default": "Alt+R" }, "description": "Toggle rulers and guides" },
+    "toggle-guides": { "suggested_key": { "default": "Alt+Shift+R" }, "description": "Show or hide guides" },
+    "clear-guides": { "suggested_key": { "default": "Alt+Shift+Backspace" }, "description": "Clear all guides" }
+  }
+}
