@@ -27,6 +27,7 @@ const separateInput = document.querySelector("#separate");
 const swatches = [...document.querySelectorAll(".swatch")];
 let rulersEnabled = false;
 let guidesVisible = true;
+let mirrorEnabled = false;
 let palette = "orange";
 
 const render = () => {
