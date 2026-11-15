@@ -30,7 +30,8 @@ const findChrome = () => {
 const server = createServer((req, res) => {
   const file = join(root, req.url === "/" ? "demo/index.html" : req.url.split("?")[0]);
   if (!file.startsWith(root) || !existsSync(file)) { res.writeHead(404); res.end(); return; }
-  res.writeHead(200, { "content-type": "text/html" }); res.end(readFileSync(file));
+  const types = { xml: "application/xml", svg: "image/svg+xml", txt: "text/plain" };
+  res.writeHead(200, { "content-type": types[file.split(".").pop()] || "text/html" }); res.end(readFileSync(file));
 });
 await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
 const origin = `http://127.0.0.1:${server.address().port}`;
@@ -83,6 +84,16 @@ try {
   const { targetId } = await send("Target.createTarget", { url: "about:blank" });
   const { sessionId: page } = await send("Target.attachToTarget", { targetId, flatten: true });
   await send("Page.enable", {}, page);
+  const errors = [];
+  ws.addEventListener("message", ({ data }) => {
+    const message = JSON.parse(data);
+    if (message.sessionId !== page) return;
+    if (message.method === "Runtime.exceptionThrown") errors.push(message.params.exceptionDetails.exception?.description || message.params.exceptionDetails.text);
+    if (message.method === "Runtime.consoleAPICalled" && message.params.type === "error") errors.push(JSON.stringify(message.params.args));
+    if (message.method === "Log.entryAdded" && message.params.entry.level === "error") errors.push(message.params.entry.text);
+  });
+  await send("Runtime.enable", {}, page);
+  await send("Log.enable", {}, page);
 
   const load = async path => { await send("Page.navigate", { url: origin + path }, page); await sleep(800); };
   const overlay = async () => {
@@ -134,6 +145,16 @@ try {
   await drag(8, 10, 400, 300);
   state = await overlay();
   check("dragging from the corner while hidden shows the new pair", state.guides === 2 && state.visible === 2, JSON.stringify(state));
+
+  // Sitemaps, SVG files and plain text are not HTML pages: Guido must stay out and log nothing.
+  await setStorage({ overlayEnabled: true, guidesVisible: true, "guides:shared": [{ axis: "v", position: 300 }] });
+  for (const path of ["/test/sitemap.xml", "/test/image.svg", "/test/plain.txt", "/"]) {
+    errors.length = 0;
+    await load(path);
+    await extension(`chrome.tabs.query({}).then(tabs => Promise.all(tabs.filter(tab => tab.url.startsWith(${JSON.stringify(origin)})).map(tab => chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] }).catch(e => String(e))))).then(() => true)`);
+    await sleep(300);
+    check(`${path} loads without errors`, errors.length === 0, JSON.stringify(errors));
+  }
 } catch (error) {
   console.error(error); failures++;
 } finally {

@@ -1,5 +1,5 @@
 (() => {
-  if (window.__rulerOverlayLoaded || window.__guidesOverlay) return;
+  if (window.__rulerOverlayLoaded || window.__guidesOverlay || !(document.createElement("div") instanceof HTMLElement)) return;
 
   const RULER_LEFT = 18;
   const RULER_TOP = 20;

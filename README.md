@@ -51,4 +51,4 @@ Change them at `chrome://extensions/shortcuts`.
 
 ## Development
 
-Plain JavaScript, no build step: `content.js` draws the rulers and guides, `popup.html` / `popup.css` / `popup.js` are the dropdown, and `background.js` handles the shortcuts. `demo/index.html` is the page in the screenshot; `test/index.html` and `test/second.html` are for trying guides across pages. `node test/guides-visible.mjs` loads the extension in Chrome for Testing and checks that guides render.
+Plain JavaScript, no build step: `content.js` draws the rulers and guides, `popup.html` / `popup.css` / `popup.js` are the dropdown, and `background.js` handles the shortcuts. `demo/index.html` is the page in the screenshot; `test/index.html` and `test/second.html` are for trying guides across pages. `node test/guides-visible.mjs` loads the extension in Chrome for Testing and checks that guides render and that XML, SVG and plain-text pages load without errors.
