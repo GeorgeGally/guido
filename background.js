@@ -23,6 +23,13 @@ async function send(tab, message) {
   }
 }
 
+// Tabs open before an install, update or reload have no live Guido until they get a fresh copy.
+chrome.runtime.onInstalled.addListener(async () => {
+  for (const tab of await chrome.tabs.query({})) {
+    if (injectable(tab)) chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] }).catch(() => {});
+  }
+});
+
 chrome.commands.onCommand.addListener(async command => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });

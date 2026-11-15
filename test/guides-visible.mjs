@@ -61,6 +61,7 @@ ws.addEventListener("message", ({ data }) => {
 });
 const send = (method, params = {}, sessionId) => new Promise((resolve, reject) => {
   const id = ++nextId; pending.set(id, { resolve, reject });
+  setTimeout(() => { if (pending.delete(id)) reject(new Error(`${method} timed out`)); }, 10000);
   ws.send(JSON.stringify({ id, method, params, ...(sessionId ? { sessionId } : {}) }));
 });
 
@@ -68,16 +69,20 @@ let failures = 0;
 const check = (name, ok, detail = "") => { console.log(`${ok ? "ok  " : "FAIL"} ${name}${ok ? "" : ` ${detail}`}`); if (!ok) failures++; };
 
 try {
-  let worker;
-  for (let i = 0; i < 50 && !worker; i++) {
-    const { targetInfos } = await send("Target.getTargets");
-    worker = targetInfos.find(target => target.type === "service_worker" && target.url === `chrome-extension://${extensionId}/background.js`);
-    if (!worker) await sleep(100);
-  }
-  if (!worker) throw new Error("extension service worker not found");
-  const { targetId: popupTarget } = await send("Target.createTarget", { url: new URL("popup.html", worker.url).href });
-  const { sessionId: popup } = await send("Target.attachToTarget", { targetId: popupTarget, flatten: true });
-  await sleep(300);
+  const openPopup = async () => {
+    let worker;
+    for (let i = 0; i < 50 && !worker; i++) {
+      const { targetInfos } = await send("Target.getTargets");
+      worker = targetInfos.find(target => target.type === "service_worker" && target.url === `chrome-extension://${extensionId}/background.js`);
+      if (!worker) await sleep(100);
+    }
+    if (!worker) throw new Error("extension service worker not found ");
+    const { targetId } = await send("Target.createTarget", { url: new URL("popup.html", worker.url).href });
+    const { sessionId } = await send("Target.attachToTarget", { targetId, flatten: true });
+    await sleep(300);
+    return sessionId;
+  };
+  let popup = await openPopup();
   const extension = async expression => (await send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true }, popup)).result.value;
   const setStorage = values => extension(`chrome.storage.local.clear().then(() => chrome.storage.local.set(${JSON.stringify(values)})).then(() => true)`);
 
@@ -106,6 +111,7 @@ try {
     const guides = nodes.filter(node => /\bguide\b/.test(cls(node)));
     return {
       rulers: nodes.some(node => id(node) === "top" && !/\bhidden\b/.test(cls(node))),
+      rulerSets: nodes.filter(node => id(node) === "top").length,
       guides: guides.length,
       visible: guides.filter(node => !/\bhidden\b/.test(cls(node))).length
     };
@@ -155,6 +161,30 @@ try {
     await sleep(300);
     check(`${path} loads without errors`, errors.length === 0, JSON.stringify(errors));
   }
+
+  // Reloading Guido (chrome://extensions reload button) cuts off the copy running in open tabs.
+  // That copy must remove itself instead of throwing "Extension context invalidated", and the tab gets a live copy.
+  await setStorage({ overlayEnabled: true, guidesVisible: true, "guides:shared": [{ axis: "v", position: 300 }] });
+  await load("/");
+  errors.length = 0;
+  const { targetId: extensionsPage } = await send("Target.createTarget", { url: "chrome://extensions" });
+  const { sessionId: extensions } = await send("Target.attachToTarget", { targetId: extensionsPage, flatten: true });
+  await sleep(1000);
+  await send("Runtime.evaluate", { expression: "chrome.developerPrivate.updateProfileConfiguration({ inDeveloperMode: true })", awaitPromise: true }, extensions);
+  await send("Runtime.evaluate", { expression: `chrome.developerPrivate.reload(${JSON.stringify(extensionId)}, { failQuietly: true })`, awaitPromise: true }, extensions);
+  await send("Target.closeTarget", { targetId: extensionsPage });
+  await sleep(1000);
+  popup = await openPopup();
+  await send("Target.activateTarget", { targetId });
+  await sleep(200);
+  await send("Emulation.setDeviceMetricsOverride", { width: 1000, height: 800, deviceScaleFactor: 1, mobile: false }, page);
+  await send("Emulation.clearDeviceMetricsOverride", {}, page);
+  await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: 400, y: 300, deltaX: 0, deltaY: 200 }, page);
+  await drag(500, 10, 500, 400);
+  await sleep(300);
+  state = await overlay();
+  check("after reloading Guido an open tab logs no errors", errors.length === 0, JSON.stringify(errors));
+  check("after reloading Guido an open tab has one live set of rulers", state.rulerSets === 1 && state.rulers && state.guides === 2, JSON.stringify(state));
 } catch (error) {
   console.error(error); failures++;
 } finally {

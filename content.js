@@ -11,6 +11,9 @@
     green: { guide: "#6c8c55", mirror: "#466132", accent: "#6c8c55" },
     blue: { guide: "#3975b8", mirror: "#214d80", accent: "#3975b8" }
   };
+  // Reloading Guido strands the old copy of this script in open tabs; tell it to remove itself.
+  document.dispatchEvent(new Event("guido:replaced"));
+  const retired = new AbortController();
   const host = document.createElement("div");
   host.style.cssText = "all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none";
   const shadow = host.attachShadow({ mode: "closed" });
@@ -67,12 +70,12 @@
     const line = document.createElement("span"); line.className = "line"; el.append(line); shadow.append(el);
     const guide = { axis, position: Number(position), el, ...(linkId ? { linkId, mirrorMaster } : {}) };
     guides.push(guide); lastGuide = guide; renderGuide(guide);
-    el.addEventListener("pointerdown", event => {
+    el.addEventListener("pointerdown", live(event => {
       if (event.altKey) { event.preventDefault(); event.stopPropagation(); lastGuide = guide; mirrorGuide(guide); return; }
       if (event.detail > 1) { event.preventDefault(); event.stopPropagation(); editGuide(guide, event); return; }
       beginDrag(event, guide);
-    });
-    el.addEventListener("dblclick", event => { event.stopPropagation(); editGuide(guide, event); });
+    }));
+    el.addEventListener("dblclick", live(event => { event.stopPropagation(); editGuide(guide, event); }));
     return guide;
   };
   const syncMirrors = () => { for (const guide of guides) { if (!guide.linkId || !guide.mirrorMaster) continue; const other = linkedGuide(guide); if (other) other.position = Math.max(0, mirrorPosition(guide.axis, guide.position)); } };
@@ -189,20 +192,25 @@
     densityQuery.addEventListener("change", updateDensity, { once: true });
   };
 
-  top.addEventListener("pointerdown", event => rulerDown("h", event));
-  left.addEventListener("pointerdown", event => rulerDown("v", event));
-  corner.addEventListener("pointerdown", event => {
+  const retire = () => { retired.abort(); densityQuery?.removeEventListener("change", updateDensity); host.remove(); };
+  const connected = () => { try { return Boolean(chrome.runtime?.id); } catch { return false; } };
+  const live = handler => event => connected() ? handler(event) : retire();
+  const options = { signal: retired.signal };
+  top.addEventListener("pointerdown", live(event => rulerDown("h", event)));
+  left.addEventListener("pointerdown", live(event => rulerDown("v", event)));
+  corner.addEventListener("pointerdown", live(event => {
     if (!active) return;
     revealGuides();
     const horizontal = makeGuide({ axis: "h", position: event.clientY + scrollY });
     const vertical = makeGuide({ axis: "v", position: event.clientX + scrollX });
     if (mirror) { mirrorGuide(horizontal); mirrorGuide(vertical); }
     beginDrag(event, [horizontal, vertical]);
-  });
-  shadow.addEventListener("pointermove", move); shadow.addEventListener("pointerup", finish); shadow.addEventListener("pointercancel", finish);
-  window.addEventListener("scroll", paint, { passive: true });
-  window.addEventListener("resize", () => { updateDensity(); syncMirrors(); paint(); save(); });
-  window.addEventListener("pointermove", move); window.addEventListener("pointerup", finish);
+  }));
+  document.addEventListener("guido:replaced", retire, options);
+  shadow.addEventListener("pointermove", live(move), options); shadow.addEventListener("pointerup", live(finish), options); shadow.addEventListener("pointercancel", live(finish), options);
+  window.addEventListener("scroll", live(paint), { passive: true, ...options });
+  window.addEventListener("resize", live(() => { updateDensity(); syncMirrors(); paint(); save(); }), options);
+  window.addEventListener("pointermove", live(move), options); window.addEventListener("pointerup", live(finish), options);
   chrome.runtime.onMessage.addListener(handleMessage);
   window.__rulerOverlayLoaded = true; window.__guidesOverlay = true;
   updateDensity(); applyPalette();
