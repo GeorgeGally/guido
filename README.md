@@ -46,8 +46,9 @@ Change them at `chrome://extensions/shortcuts`.
 - With **Mirror** on, each new guide is paired with its twin at the opposite edge. Alt-click a guide to mirror it once; paired guides move together, and deleting one leaves the other independent.
 - Vertical mirror edges are `0` and `documentElement.scrollWidth`; the scrollbar gutter is excluded. Horizontal mirror edges are `0` and `documentElement.scrollHeight`.
 - Rulers can be turned off while guides stay visible and continue to reach the page edges.
+- Hidden guides come back as soon as you drag a new one out of a ruler.
 - Guides use page coordinates, so they stay on the same spot of the page when you scroll.
 
 ## Development
 
-Plain JavaScript, no build step: `content.js` draws the rulers and guides, `popup.html` / `popup.css` / `popup.js` are the dropdown, and `background.js` handles the shortcuts. `demo/index.html` is the page in the screenshot; `test/index.html` and `test/second.html` are for trying guides across pages.
+Plain JavaScript, no build step: `content.js` draws the rulers and guides, `popup.html` / `popup.css` / `popup.js` are the dropdown, and `background.js` handles the shortcuts. `demo/index.html` is the page in the screenshot; `test/index.html` and `test/second.html` are for trying guides across pages. `node test/guides-visible.mjs` loads the extension in Chrome for Testing and checks that guides render.

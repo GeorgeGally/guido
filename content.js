@@ -155,9 +155,11 @@
     }
     dragging = null; shadow.querySelector(".tag")?.remove(); syncMirrors(); renderAll(); save();
   };
+  const revealGuides = () => { if (visibleGuides) return; visibleGuides = true; chrome.storage.local.set({ guidesVisible: true }); paint(); };
   const rulerDown = (axis, event) => {
     if (!active) return;
     event.preventDefault();
+    revealGuides();
     const position = axis === "h" ? event.clientY + scrollY : event.clientX + scrollX;
     const guide = makeGuide({ axis, position });
     if (mirror) mirrorGuide(guide);
@@ -191,6 +193,7 @@
   left.addEventListener("pointerdown", event => rulerDown("v", event));
   corner.addEventListener("pointerdown", event => {
     if (!active) return;
+    revealGuides();
     const horizontal = makeGuide({ axis: "h", position: event.clientY + scrollY });
     const vertical = makeGuide({ axis: "v", position: event.clientX + scrollX });
     if (mirror) { mirrorGuide(horizontal); mirrorGuide(vertical); }
